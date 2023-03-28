@@ -1,6 +1,6 @@
-module.default =  {
-	plugins: {
-		tailwindcss: {},
-		autoprefixer: {},
-	},
+module.default = {
+    plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+    },
 }

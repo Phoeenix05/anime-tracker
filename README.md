@@ -1,34 +1,28 @@
-## Usage
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+# Anime Tracker
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+A simple application that I made to track anime and manga on some sites.
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+## Authors
 
-## Available Scripts
+- [@phoeenix05](https://www.github.com/phoeenix05)
 
-In the project directory, you can run:
 
-### `npm dev` or `npm start`
+## Badges
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<!-- [contributors-shield]: https://img.shields.io/github/contributors/phoeenix05/anime-tracker.svg?style=for-the-badge
+[contributors-url]: https://github.com/phoeenix05/anime-tracker/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/phoeenix05/anime-tracker.svg?style=for-the-badge
+[forks-url]: https://github.com/phoeenix05/anime-tracker/network/members
+[stars-shield]: https://img.shields.io/github/stars/phoeenix05/anime-tracker.svg?style=for-the-badge
+[stars-url]: https://github.com/phoeenix05/anime-tracker/stargazers
+[issues-shield]: https://img.shields.io/github/issues/phoeenix05/anime-tracker.svg?style=for-the-badge
+[issues-url]: https://github.com/phoeenix05/anime-tracker/issues -->
 
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+[![Contributors](https://img.shields.io/github/contributors/phoeenix05/anime-tracker.svg?style=for-the-badge)](https://github.com/phoeenix05/anime-tracker/graphs/contributors)
+[![Stars](https://img.shields.io/github/stars/phoeenix05/anime-tracker.svg?style=for-the-badge)](https://github.com/phoeenix05/anime-tracker/stargazers)
+[![Issues](https://img.shields.io/github/issues/phoeenix05/anime-tracker.svg?style=for-the-badge)](https://github.com/phoeenix05/anime-tracker/issues)
+[![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=mit)](https://choosealicense.com/licenses/mit)
+[![Tauri badge](https://img.shields.io/badge/tauri-222222?style=for-the-badge&logo=tauri&logoColor=yellow)](https://tauri.app)
+[![SolidJS badge](https://img.shields.io/badge/solid-222222?style=for-the-badge&logo=solid&logoColor=blue)](https://tauri.app)

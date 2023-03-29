@@ -1,19 +1,23 @@
+mod api;
+
 #[macro_use]
 extern crate rocket;
 
-#[get("/hallo")]
-fn hallo() -> &'static str {
-    "Hallo there!"
-}
+// #[get("/hallo")]
+// fn hallo() -> &'static str {
+//     "Hallo there!"
+// }
 
-#[catch(404)]
-fn not_found() -> &'static str {
-    "404 Not Found"
-}
+// #[catch(404)]
+// fn not_found() -> &'static str {
+//     "404 Not Found"
+// }
 
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/api", routes![hallo])
-        .register("/", catchers![not_found])
+        .mount("/api/mangadex", api::mangadex::routes())
+        .mount("/api/zoro", api::zoro::routes())
+    // .mount("/api", routes![hallo])
+    // .register("/", catchers![not_found])
 }

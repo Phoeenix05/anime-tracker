@@ -3,3 +3,5 @@
 
 # npm test
 pnpm lint:fix
+# pnpm tauri build && cargo build --package src-api --release
+./build.sh

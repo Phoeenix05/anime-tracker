@@ -1,10 +1,12 @@
 {
-  "name": "vite-template-solid",
+  "name": "anime-tracker",
   "version": "0.0.0",
   "description": "",
   "scripts": {
     "start": "vite",
-    "dev": "vite",
+    "dev:all": "concurrently --ks 'pnpm dev:app' 'pnpm dev:api'",
+    "dev:app": "vite",
+    "dev:api": "cargo run src-api",
     "build": "vite build",
     "serve": "vite preview",
     "lint:fix": "eslint --cache --fix ./src/**/*.tsx",
@@ -17,6 +19,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "autoprefixer": "^10.4.14",
+    "concurrently": "^8.0.1",
     "eslint": "^8.36.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.0",

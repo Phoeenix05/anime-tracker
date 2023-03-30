@@ -5,6 +5,7 @@ use rocket::serde::{json::Json, Deserialize};
 #[derive(Debug, Deserialize)]
 pub struct Mangadex {
     url: String,
+    uuid: String,
 }
 
 // impl Mangadex {

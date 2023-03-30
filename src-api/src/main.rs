@@ -3,21 +3,20 @@ mod api;
 #[macro_use]
 extern crate rocket;
 
-// #[get("/hallo")]
-// fn hallo() -> &'static str {
-//     "Hallo there!"
+// #[get("/<t>")]
+// fn b(t: i32) -> String {
+//     format!("i32: {}", t)
 // }
 
-// #[catch(404)]
-// fn not_found() -> &'static str {
-//     "404 Not Found"
+// #[get("/<t>", rank = 2)]
+// fn a(t: &str) -> String {
+//     format!("String: {}", t)
 // }
 
 #[launch]
 async fn rocket() -> _ {
     rocket::build()
-        .mount("/api/mangadex", api::mangadex::routes())
-        .mount("/api/zoro", api::zoro::routes())
-    // .mount("/api", routes![hallo])
-    // .register("/", catchers![not_found])
+        // .mount("/", routes![a, b])
+        .mount("/api", api::mangadex::routes())
+        .mount("/api", api::zoro::routes())
 }

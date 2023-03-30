@@ -3,6 +3,17 @@
 
 A simple application that I made to track anime and manga on some sites.
 
+[Easel](https://arc.net/e/D68DDA65-B183-4DE7-B614-18BCE4A8D10D)
+
+[Notes](https://arc.net/p/7AEB2015-B325-47EF-9229-E3203CD223B9)
+
+
+## 1st party platform support
+| Platform | yes | no  |
+|:--------:|:---:|:---:|
+| MacOS    |  x  |     |
+| Windows  |     |  x  |
+| Linux    |     |  x  |
 
 ## Authors
 

@@ -2,6 +2,10 @@ import type { Component } from 'solid-js'
 
 import styles from './App.module.css'
 import logo from './logo.svg'
+// import { invoke } from '@tauri-apps/api/tauri'
+
+// const data = await invoke<string>('get_api_data', {})
+// console.log(data)
 
 const App: Component = () => {
     return (

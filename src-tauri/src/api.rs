@@ -1,23 +1,21 @@
 mod providers;
 pub use providers::*;
 
-use std::sync::Mutex;
+use async_trait::async_trait;
+use std::sync::{Arc, Mutex};
 
 lazy_static::lazy_static! {
-    pub static ref API_MANAGER: Mutex<ApiManager> = Mutex::new(ApiManager::new(Box::new(kitsu::KitsuApi)));
+    #[derive(Clone)]
+    pub static ref API_MANAGER: Arc<Mutex<ApiManager>> = Arc::new(Mutex::new(ApiManager::new(Box::new(kitsu::KitsuApi))));
 }
 
-// #[derive()]
-// pub enum ApiTypes {
-//     URL(String),
-// }
-
+#[async_trait]
 pub trait Api: Send + Sync {
-    fn search(&self, query: String) -> String;
+    async fn search(&self, query: String) -> Result<Vec<String>, String>;
 
-    fn search_anime(&self, query: String) -> String;
+    async fn search_anime(&self, query: String) -> Result<Vec<String>, String>;
 
-    fn search_manga(&self, query: String) -> String;
+    async fn search_manga(&self, query: String) -> Result<Vec<String>, String>;
 }
 
 pub struct ApiManager {
@@ -33,23 +31,19 @@ impl ApiManager {
         self.api = api;
     }
 
-    pub fn search(&self, query: String) -> String {
-        self.api.search(query)
+    pub async fn search(&self, query: String) -> Result<Vec<String>, String> {
+        self.api.search(query.clone()).await
     }
 
-    pub fn search_anime(&self, query: String) -> String {
-        self.api.search_anime(query)
+    async fn _search_anime(&self, query: String) -> Result<Vec<String>, String> {
+        self.api.search_anime(query.clone()).await
     }
 
-    pub fn search_manga(&self, query: String) -> String {
-        self.api.search_manga(query)
+    async fn _search_manga(&self, query: String) -> Result<Vec<String>, String> {
+        self.api.search_manga(query.clone()).await
     }
 }
 
-/// Add a new match arm for every new API implementation
-///
-/// Returns
-/// - Option<Box<dyn Api + Send + Sync>> - Api implementation
 fn get_api(api_name: &str) -> Option<Box<dyn Api + Send + Sync>> {
     match api_name {
         "kitsu" => Some(Box::new(kitsu::KitsuApi)),
@@ -58,16 +52,6 @@ fn get_api(api_name: &str) -> Option<Box<dyn Api + Send + Sync>> {
     }
 }
 
-/// It takes a string as an argument, and if it can find an API with that name, it sets it as the
-/// current API
-///
-/// Arguments:
-///
-/// * `api_name`: The name of the API to set.
-///
-/// Returns:
-///
-/// A Result<(), String>
 #[tauri::command]
 pub fn set_api(api_name: &str) -> Result<(), String> {
     let mut api_manager = API_MANAGER.lock().unwrap();

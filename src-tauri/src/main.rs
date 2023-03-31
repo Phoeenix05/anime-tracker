@@ -16,17 +16,12 @@ enum SearchMode {
 }
 
 #[tauri::command]
-fn search_api(query: String, mode: Option<SearchMode>) -> Result<String, ()> {
-    let mode = mode.unwrap_or(SearchMode::Any);
-    
-    let api_manager = API_MANAGER.lock().unwrap();
-    let result = match mode {
-        SearchMode::Anime => api_manager.search_anime(query),
-        SearchMode::Manga => api_manager.search_manga(query),
-        SearchMode::Any => api_manager.search(query),
-    };
+async fn search_api(query: String) -> Result<Vec<String>, ()> {
+    // let api_manager = API_MANAGER.lock().unwrap();
+    // let result = api_manager.search(query).await?;
 
-    Ok(result)
+    // Ok(result)
+    todo!()
 }
 
 fn main() {

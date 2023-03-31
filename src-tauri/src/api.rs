@@ -2,64 +2,61 @@ mod providers;
 pub use providers::*;
 
 use async_trait::async_trait;
-use std::sync::{Arc, Mutex};
 
-lazy_static::lazy_static! {
-    #[derive(Clone)]
-    pub static ref API_MANAGER: Arc<Mutex<ApiManager>> = Arc::new(Mutex::new(ApiManager::new(Box::new(kitsu::KitsuApi))));
+use lazy_static::lazy_static;
+// use std::sync::Mutex;
+use tauri::async_runtime::Mutex;
+
+use self::{jikan::JikanApiImpl, kitsu::KitsuApiImpl};
+
+lazy_static! {
+    pub static ref API_MANAGER: Mutex<ApiManager> = Mutex::new(ApiManager::new());
 }
 
 #[async_trait]
-pub trait Api: Send + Sync {
-    async fn search(&self, query: String) -> Result<Vec<String>, String>;
-
-    async fn search_anime(&self, query: String) -> Result<Vec<String>, String>;
-
-    async fn search_manga(&self, query: String) -> Result<Vec<String>, String>;
+pub trait ApiImpl: Send + Sync {
+    async fn search(&self, query: String) -> Result<String, String>;
+    
+    async fn search_anime(&self, query: String) -> Result<String, String>;
+    
+    async fn search_manga(&self, query: String) -> Result<String, String>;
 }
 
 pub struct ApiManager {
-    api: Box<dyn Api + Send + Sync>,
+    api: Box<dyn ApiImpl + Send + Sync>,
 }
 
 impl ApiManager {
-    pub fn new(api: Box<dyn Api + Send + Sync>) -> Self {
-        Self { api }
+    fn new() -> Self {
+        Self {
+            api: Box::new(KitsuApiImpl::default()),
+        }
     }
 
-    pub fn set_api(&mut self, api: Box<dyn Api + Send + Sync>) {
-        self.api = api;
+    pub async fn search(&self, query: String) -> Result<String, String> {
+        self.api.search(query).await
     }
 
-    pub async fn search(&self, query: String) -> Result<Vec<String>, String> {
-        self.api.search(query.clone()).await
-    }
-
-    async fn _search_anime(&self, query: String) -> Result<Vec<String>, String> {
-        self.api.search_anime(query.clone()).await
-    }
-
-    async fn _search_manga(&self, query: String) -> Result<Vec<String>, String> {
-        self.api.search_manga(query.clone()).await
+    fn set_api(&mut self, api: Box<dyn ApiImpl + Send + Sync>) {
+        self.api = api
     }
 }
 
-fn get_api(api_name: &str) -> Option<Box<dyn Api + Send + Sync>> {
-    match api_name {
-        "kitsu" => Some(Box::new(kitsu::KitsuApi)),
-        "jikan" => Some(Box::new(jisho::JikanApi)),
+fn get_api_impl(name: String) -> Option<Box<dyn ApiImpl + Send + Sync>> {
+    match name.as_str() {
+        "kitsu" => Some(Box::new(KitsuApiImpl::default())),
+        "jikan" => Some(Box::new(JikanApiImpl::default())),
         _ => None,
     }
 }
 
 #[tauri::command]
-pub fn set_api(api_name: &str) -> Result<(), String> {
-    let mut api_manager = API_MANAGER.lock().unwrap();
-    if let Some(api) = get_api(api_name) {
-        api_manager.set_api(api);
-        return Ok(());
+pub async fn set_api_implementation(impl_name: String) -> Result<(), String> {
+    let mut api_manager = API_MANAGER.lock().await;
+
+    if let Some(api) = get_api_impl(impl_name) {
+        api_manager.set_api(api)
     }
 
-    let err_msg = format!("Could not find API with name `{}`", api_name);
-    Err(err_msg)
+    todo!()
 }

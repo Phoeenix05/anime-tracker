@@ -1,3 +1,3 @@
 pub mod kitsu;
 
-pub mod jisho;
+pub mod jikan;

@@ -1,4 +1,5 @@
 #![allow(unused_variables)]
+
 use rocket::http::Status;
 use rocket::serde::{json::Json, Deserialize};
 

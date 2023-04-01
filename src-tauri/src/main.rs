@@ -7,10 +7,12 @@ mod api;
 use api::{set_api_implementation, API_MANAGER};
 
 #[tauri::command]
-async fn search_api(query: String) -> Result<String, String> {
+async fn search_api(query: String) -> Result<(String, String), String> {
     let api_manager = API_MANAGER.lock().await;
-    let result = api_manager.search(query).await;
-    result
+    match api_manager.search(query).await {
+        Ok(res) => Ok(res),
+        Err(err) => Err(err.to_string()),
+    }
 }
 
 fn main() {

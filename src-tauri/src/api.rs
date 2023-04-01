@@ -4,7 +4,6 @@ pub use providers::*;
 use async_trait::async_trait;
 
 use lazy_static::lazy_static;
-// use std::sync::Mutex;
 use tauri::async_runtime::Mutex;
 
 use self::{jikan::JikanApiImpl, kitsu::KitsuApiImpl};
@@ -15,11 +14,11 @@ lazy_static! {
 
 #[async_trait]
 pub trait ApiImpl: Send + Sync {
-    async fn search(&self, query: String) -> Result<String, String>;
-    
-    async fn search_anime(&self, query: String) -> Result<String, String>;
-    
-    async fn search_manga(&self, query: String) -> Result<String, String>;
+    async fn search(&self, query: String) -> Result<(String, String), reqwest::Error>;
+
+    async fn search_anime(&self, query: String) -> Result<String, reqwest::Error>;
+
+    async fn search_manga(&self, query: String) -> Result<String, reqwest::Error>;
 }
 
 pub struct ApiManager {
@@ -33,7 +32,7 @@ impl ApiManager {
         }
     }
 
-    pub async fn search(&self, query: String) -> Result<String, String> {
+    pub async fn search(&self, query: String) -> Result<(String, String), reqwest::Error> {
         self.api.search(query).await
     }
 

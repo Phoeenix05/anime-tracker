@@ -18,12 +18,6 @@ lazy_static! {
     );
 }
 
-// pub struct ApiFields {
-//     name: String,
-//     url: String,
-//     client: reqwest::Client,
-// }
-
 #[async_trait]
 pub trait ApiImpl: Send + Sync {
     async fn search(&self, query: String) -> Result<(String, String), reqwest::Error>;

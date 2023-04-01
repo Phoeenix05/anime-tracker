@@ -1,35 +1,23 @@
-import type { Component } from 'solid-js'
+import { invoke } from '@tauri-apps/api/tauri'
+import { Component, createResource, createSignal } from 'solid-js'
 
-import styles from './App.module.css'
-import logo from './logo.svg'
-// import { invoke } from '@tauri-apps/api/tauri'
-
-// const data = await invoke<string>('get_api_data', {})
-// console.log(data)
-
-// await invoke("set_api_implementation", { implName: "Jikan (3rd party MyAnimeList API)" })
-// await invoke("get_api_implementation", {})
-
-// const data = await invoke<string>("get_api_impls", {})
-// console.log(data)
+const fetch_data = async (q: string): Promise<[object, object]> => {
+    return await invoke<[string, string]>("search_api", { query: q })
+        .then(res => [JSON.parse(res[0]), JSON.parse(res[1])])
+}
 
 const App: Component = () => {
+    const [query, setQuery] = createSignal("sword art online")
+    const [data, { mutate, refetch }] = createResource(query, fetch_data)
+    
     return (
-        <div class={styles.App}>
-            <header class={styles.header}>
-                <img src={logo} class={styles.logo} alt="logo" />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a
-                    class={styles.link}
-                    href="https://github.com/solidjs/solid"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn Solid
-                </a>
-            </header>
+        <div>
+            <input type="text" onChange={(e) => setQuery(e.currentTarget.value)} />
+            {/* <button onClick={refetch}>search</button> */}
+            { data.loading ? <p>Loading...</p> : <div>
+                <pre>{ JSON.stringify(data()?.[0], null, 2) }</pre>
+                <pre>{ JSON.stringify(data()?.[1], null, 2) }</pre>
+            </div> }
         </div>
     )
 }

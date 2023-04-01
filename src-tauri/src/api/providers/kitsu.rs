@@ -26,27 +26,19 @@ impl ApiImpl for KitsuApiImpl {
 
     async fn search_anime(&self, query: String) -> Result<String, reqwest::Error> {
         let url = format!("{}/anime?filter[text]={}", self.url, query);
-        let result = self
-            .client
-            .get(url)
-            .send()
-            .await?
-            .text()
-            .await?;
+        let result = self.client.get(url).send().await?.text().await?;
 
         Ok(result)
     }
 
     async fn search_manga(&self, query: String) -> Result<String, reqwest::Error> {
         let url = format!("{}/manga?filter[text]={}", self.url, query);
-        let result = self
-            .client
-            .get(url)
-            .send()
-            .await?
-            .text()
-            .await?;
+        let result = self.client.get(url).send().await?.text().await?;
 
         Ok(result)
+    }
+
+    fn get_name(&self) -> String {
+        "Kitsu.io".to_owned()
     }
 }

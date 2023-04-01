@@ -7,6 +7,12 @@ import logo from './logo.svg'
 // const data = await invoke<string>('get_api_data', {})
 // console.log(data)
 
+// await invoke("set_api_implementation", { implName: "Jikan (3rd party MyAnimeList API)" })
+// await invoke("get_api_implementation", {})
+
+// const data = await invoke<string>("get_api_impls", {})
+// console.log(data)
+
 const App: Component = () => {
     return (
         <div class={styles.App}>

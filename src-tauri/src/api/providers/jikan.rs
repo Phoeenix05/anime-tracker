@@ -26,27 +26,19 @@ impl ApiImpl for JikanApiImpl {
 
     async fn search_anime(&self, query: String) -> Result<String, reqwest::Error> {
         let url = format!("{}/anime?q={}", self.url, query);
-        let result = self
-            .client
-            .get(url)
-            .send()
-            .await?
-            .text()
-            .await?;
+        let result = self.client.get(url).send().await?.text().await?;
 
         Ok(result)
     }
 
     async fn search_manga(&self, query: String) -> Result<String, reqwest::Error> {
         let url = format!("{}/manga?q={}", self.url, query);
-        let result = self
-            .client
-            .get(url)
-            .send()
-            .await?
-            .text()
-            .await?;
+        let result = self.client.get(url).send().await?.text().await?;
 
         Ok(result)
+    }
+
+    fn get_name(&self) -> String {
+        "Jikan (3rd party MyAnimeList API)".to_owned()
     }
 }

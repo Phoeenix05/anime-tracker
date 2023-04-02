@@ -38,7 +38,11 @@ impl ApiImpl for KitsuApiImpl {
         Ok(result)
     }
 
-    fn get_name(&self) -> String {
-        "Kitsu.io".to_owned()
+    fn name(&self) -> &str {
+        "Kitsu.io"
+    }
+
+    fn desc(&self) -> &str {
+        "Uses Kitsu.io's API to search data"
     }
 }

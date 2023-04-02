@@ -3,6 +3,8 @@ import { Component, createResource, createSignal } from 'solid-js'
 import { JikanData } from './util/data'
 
 await invoke('set_api_impl', { implName: 'Jikan (3rd party MyAnimeList API)' })
+const data = await invoke('get_api_impls', {})
+console.log(data)
 
 const fetch_data = async (q: string): Promise<[JikanData, JikanData]> => {
     return await invoke<[string, string]>('search_api', { query: q })

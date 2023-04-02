@@ -1,20 +1,19 @@
 mod providers;
 use std::{collections::HashMap, sync::Arc};
 
-pub use providers::*;
+use providers::{jikan::JikanApiImpl, kitsu::KitsuApiImpl, offline::OfflineImpl};
 
 use async_trait::async_trait;
 
 use lazy_static::lazy_static;
 use tauri::async_runtime::Mutex;
 
-use self::{jikan::JikanApiImpl, kitsu::KitsuApiImpl};
-
 lazy_static! {
     pub static ref API_MANAGER: Mutex<ApiManager> = Mutex::new(
         ApiManager::new()
             .add_api(Arc::new(JikanApiImpl::default()))
             .add_api(Arc::new(KitsuApiImpl::default()))
+            .add_api(Arc::new(OfflineImpl::default()))
     );
 }
 
@@ -26,7 +25,9 @@ pub trait ApiImpl: Send + Sync {
 
     async fn search_manga(&self, query: String) -> Result<String, reqwest::Error>;
 
-    fn get_name(&self) -> String;
+    fn name(&self) -> &str;
+
+    fn desc(&self) -> &str;
 }
 
 pub struct ApiManager {
@@ -51,7 +52,7 @@ impl ApiManager {
     }
 
     fn add_api(mut self, api: Arc<dyn ApiImpl + Send + Sync>) -> Self {
-        self.apis.insert(api.get_name(), api);
+        self.apis.insert(api.name().into(), api);
         self
     }
 
@@ -77,13 +78,15 @@ pub async fn set_api_impl(impl_name: String) -> Result<(), String> {
 #[tauri::command]
 pub async fn get_api_impl() {
     let api_manager = API_MANAGER.lock().await;
-    dbg!(api_manager.api.get_name());
+    dbg!(api_manager.api.name());
 }
 
 #[tauri::command]
-pub async fn get_api_impls() -> Vec<String> {
+pub async fn get_api_impls() -> HashMap<String, String> {
+    let info =
+        |api: &Arc<dyn ApiImpl + Send + Sync>| (api.name().to_owned(), api.desc().to_owned());
     let api_manager = API_MANAGER.lock().await;
-    api_manager.apis.keys().map(|k| k.clone()).collect()
+    api_manager.apis.iter().map(|(_, i)| info(i)).collect()
 }
 
 #[tauri::command]

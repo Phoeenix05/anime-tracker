@@ -38,7 +38,11 @@ impl ApiImpl for JikanApiImpl {
         Ok(result)
     }
 
-    fn get_name(&self) -> String {
-        "Jikan (3rd party MyAnimeList API)".to_owned()
+    fn name(&self) -> &str {
+        "Jikan (3rd party MyAnimeList API)"
+    }
+
+    fn desc(&self) -> &str {
+        "Uses Jikan's API to search data"
     }
 }

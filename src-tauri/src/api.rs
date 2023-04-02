@@ -9,8 +9,29 @@ use tauri::async_runtime::Mutex;
 use crate::generate_impls;
 use providers::{jikan::JikanApiImpl, kitsu::KitsuApiImpl, offline::OfflineImpl};
 
+///// ––––––––––––––––––––––––––– \\\\\\
+///// –––––––– Api Trait –––––––– \\\\\\
+///// ––––––––––––––––––––––––––– \\\\\\
+
 pub type ApiType = dyn ApiImpl + Send + Sync;
-pub type ApiRes<T> = Result<T, reqwest::Error>;
+pub type Res<T> = Result<T, reqwest::Error>;
+
+#[async_trait]
+pub trait ApiImpl: Send + Sync {
+    async fn search(&self, query: String) -> Res<(String, String)>;
+
+    async fn search_anime(&self, query: String) -> Res<String>;
+
+    async fn search_manga(&self, query: String) -> Res<String>;
+
+    fn name(&self) -> &str;
+
+    fn desc(&self) -> &str;
+}
+
+///// ––––––––––––––––––––––––––––– \\\\\\
+///// –––––––– Api Manager –––––––– \\\\\\
+///// ––––––––––––––––––––––––––––– \\\\\\
 
 lazy_static! {
     pub static ref API_MANAGER: Mutex<ApiManager> =
@@ -19,19 +40,6 @@ lazy_static! {
             KitsuApiImpl,
             OfflineImpl
         ]));
-}
-
-#[async_trait]
-pub trait ApiImpl: Send + Sync {
-    async fn search(&self, query: String) -> ApiRes<(String, String)>;
-
-    async fn search_anime(&self, query: String) -> ApiRes<String>;
-
-    async fn search_manga(&self, query: String) -> ApiRes<String>;
-
-    fn name(&self) -> &str;
-
-    fn desc(&self) -> &str;
 }
 
 pub struct ApiManager {
@@ -47,7 +55,7 @@ impl ApiManager {
         }
     }
 
-    pub async fn search(&self, query: String) -> ApiRes<(String, String)> {
+    pub async fn search(&self, query: String) -> Res<(String, String)> {
         self.api.search(query).await
     }
 
@@ -70,6 +78,10 @@ impl ApiManager {
     }
 }
 
+///// –––––––––––––––––––––––––––––––– \\\\\\
+///// –––––––– Tauri Commands –––––––– \\\\\\
+///// –––––––––––––––––––––––––––––––– \\\\\\
+
 #[tauri::command]
 pub async fn set_api_impl(impl_name: String) -> Result<(), String> {
     let mut api_manager = API_MANAGER.lock().await;
@@ -78,6 +90,7 @@ pub async fn set_api_impl(impl_name: String) -> Result<(), String> {
         api_manager.set_api(api)
     }
 
+    dbg!(api_manager.api.name());
     Ok(())
 }
 

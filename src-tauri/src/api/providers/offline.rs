@@ -1,8 +1,7 @@
 #[allow(dead_code, unused_variables)]
-
 use async_trait::async_trait;
 
-use crate::api::{ApiImpl, ApiRes};
+use crate::api::{ApiImpl, Res};
 
 pub struct OfflineImpl {
     path: String,
@@ -18,18 +17,18 @@ impl Default for OfflineImpl {
 
 #[async_trait]
 impl ApiImpl for OfflineImpl {
-    async fn search(&self, query: String) -> ApiRes<(String, String)> {
+    async fn search(&self, query: String) -> Res<(String, String)> {
         // let data_pb = tauri::api::path::app_data_dir(tauri::Config::);
         // include_str!("../../../../resources/livechart-raw-data.json");
-        
+
         todo!()
     }
 
-    async fn search_anime(&self, query: String) -> ApiRes<String> {
+    async fn search_anime(&self, query: String) -> Res<String> {
         unimplemented!()
     }
 
-    async fn search_manga(&self, query: String) -> ApiRes<String> {
+    async fn search_manga(&self, query: String) -> Res<String> {
         unimplemented!()
     }
 

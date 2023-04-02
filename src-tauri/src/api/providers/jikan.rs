@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 
-use crate::api::{ApiImpl, ApiRes};
+use crate::api::{ApiImpl, Res};
 
 pub struct JikanApiImpl {
     url: String,
@@ -18,20 +18,20 @@ impl Default for JikanApiImpl {
 
 #[async_trait]
 impl ApiImpl for JikanApiImpl {
-    async fn search(&self, query: String) -> ApiRes<(String, String)> {
+    async fn search(&self, query: String) -> Res<(String, String)> {
         let anime = self.search_anime(query.to_owned()).await?;
         let manga = self.search_manga(query.to_owned()).await?;
         Ok((anime, manga))
     }
 
-    async fn search_anime(&self, query: String) -> ApiRes<String> {
+    async fn search_anime(&self, query: String) -> Res<String> {
         let url = format!("{}/anime?q={}", self.url, query);
         let result = self.client.get(url).send().await?.text().await?;
 
         Ok(result)
     }
 
-    async fn search_manga(&self, query: String) -> ApiRes<String> {
+    async fn search_manga(&self, query: String) -> Res<String> {
         let url = format!("{}/manga?q={}", self.url, query);
         let result = self.client.get(url).send().await?.text().await?;
 

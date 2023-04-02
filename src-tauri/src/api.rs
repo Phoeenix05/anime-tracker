@@ -1,29 +1,33 @@
 mod providers;
-use std::{collections::HashMap, sync::Arc};
-
-use providers::{jikan::JikanApiImpl, kitsu::KitsuApiImpl, offline::OfflineImpl};
 
 use async_trait::async_trait;
-
 use lazy_static::lazy_static;
+
+use std::{collections::HashMap, sync::Arc};
 use tauri::async_runtime::Mutex;
 
+use crate::generate_impls;
+use providers::{jikan::JikanApiImpl, kitsu::KitsuApiImpl, offline::OfflineImpl};
+
+pub type ApiType = dyn ApiImpl + Send + Sync;
+pub type ApiRes<T> = Result<T, reqwest::Error>;
+
 lazy_static! {
-    pub static ref API_MANAGER: Mutex<ApiManager> = Mutex::new(
-        ApiManager::new()
-            .add_api(Arc::new(JikanApiImpl::default()))
-            .add_api(Arc::new(KitsuApiImpl::default()))
-            .add_api(Arc::new(OfflineImpl::default()))
-    );
+    pub static ref API_MANAGER: Mutex<ApiManager> =
+        Mutex::new(ApiManager::new().add_apis(generate_impls![
+            JikanApiImpl,
+            KitsuApiImpl,
+            OfflineImpl
+        ]));
 }
 
 #[async_trait]
 pub trait ApiImpl: Send + Sync {
-    async fn search(&self, query: String) -> Result<(String, String), reqwest::Error>;
+    async fn search(&self, query: String) -> ApiRes<(String, String)>;
 
-    async fn search_anime(&self, query: String) -> Result<String, reqwest::Error>;
+    async fn search_anime(&self, query: String) -> ApiRes<String>;
 
-    async fn search_manga(&self, query: String) -> Result<String, reqwest::Error>;
+    async fn search_manga(&self, query: String) -> ApiRes<String>;
 
     fn name(&self) -> &str;
 
@@ -31,8 +35,8 @@ pub trait ApiImpl: Send + Sync {
 }
 
 pub struct ApiManager {
-    api: Arc<dyn ApiImpl + Send + Sync>,
-    apis: HashMap<String, Arc<dyn ApiImpl + Send + Sync>>,
+    api: Arc<ApiType>,
+    apis: HashMap<String, Arc<ApiType>>,
 }
 
 impl ApiManager {
@@ -43,20 +47,22 @@ impl ApiManager {
         }
     }
 
-    pub async fn search(&self, query: String) -> Result<(String, String), reqwest::Error> {
+    pub async fn search(&self, query: String) -> ApiRes<(String, String)> {
         self.api.search(query).await
     }
 
-    fn set_api(&mut self, api: Arc<dyn ApiImpl + Send + Sync>) {
+    fn set_api(&mut self, api: Arc<ApiType>) {
         self.api = api
     }
 
-    fn add_api(mut self, api: Arc<dyn ApiImpl + Send + Sync>) -> Self {
-        self.apis.insert(api.name().into(), api);
+    fn add_apis(mut self, apis: Vec<Arc<ApiType>>) -> Self {
+        for api in apis.into_iter() {
+            self.apis.insert(api.name().into(), api);
+        }
         self
     }
 
-    fn get_api_impl(&self, name: String) -> Option<Arc<dyn ApiImpl + Send + Sync>> {
+    fn get_api_impl(&self, name: String) -> Option<Arc<ApiType>> {
         if let Some(api) = self.apis.get(&name).cloned() {
             return Some(api);
         }
@@ -83,8 +89,7 @@ pub async fn get_api_impl() {
 
 #[tauri::command]
 pub async fn get_api_impls() -> HashMap<String, String> {
-    let info =
-        |api: &Arc<dyn ApiImpl + Send + Sync>| (api.name().to_owned(), api.desc().to_owned());
+    let info = |api: &Arc<ApiType>| (api.name().to_owned(), api.desc().to_owned());
     let api_manager = API_MANAGER.lock().await;
     api_manager.apis.iter().map(|(_, i)| info(i)).collect()
 }

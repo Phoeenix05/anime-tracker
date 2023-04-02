@@ -20,8 +20,8 @@ const App: Component = () => {
             <input type="text" onChange={(e) => setQuery(e.currentTarget.value)} />
             {/* <button onClick={refetch}>search</button> */}
             { data.loading ? <p>Loading...</p> : <div>
-                <pre>{ JSON.stringify(data()?.[0].data[1].chapters, null, 2) }</pre>
-                {/* <pre>{ JSON.stringify(data()?.[1], null, 2) }</pre> */}
+                <pre>{ JSON.stringify(data()?.[0].data[1], null, 2) }</pre>
+                <pre>{ JSON.stringify(data()?.[1].data[1], null, 2) }</pre>
             </div> }
         </div>
     )

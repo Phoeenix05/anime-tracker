@@ -1,14 +1,10 @@
 import { invoke } from '@tauri-apps/api/tauri'
-import { Component, For, Suspense, createResource, createSignal } from 'solid-js'
-import { JikanData, KitsuData } from './util/data'
+import { Component, Suspense, createResource, createSignal } from 'solid-js'
+import { ApiData } from './util/data'
 
-// await invoke('set_api_impl', { implName: 'Jikan (3rd party MyAnimeList API)' })
-// const data = await invoke('get_api_impls', {})
-// console.log(data)
-
-const fetch_data = async (q: string): Promise<[KitsuData, KitsuData]> => {
-    return await invoke<[string, string]>('search_api', { query: q })
-        .then(res => [JSON.parse(res[0]), JSON.parse(res[1])])
+const fetch_data = async (q: string): Promise<ApiData> => {
+    return await invoke<string>('search_api', { query: q })
+        .then(res => JSON.parse(res))
 }
 
 const set_jikan = async () => await invoke('set_api_impl', { implName: 'Jikan (3rd party MyAnimeList API)' })
@@ -24,15 +20,16 @@ const App: Component = () => {
             <button onClick={refetch}>refresh</button>
             <button onClick={set_kitsu}>Kitsu</button>
             <button onClick={set_jikan}>Jikan</button>
-            {/* <Suspense fallback={<p>Loading...</p>}>
-                <For each={data()?.[0].data}>
+            <Suspense fallback={<p>Loading...</p>}>
+                <pre>{ data()?.anime?.[0].titles.en }</pre>
+                {/* <For each={data()?.[0].data}>
                     {(item, index) => 
                         <div>
                             #{index()} {item.attributes.titles.en}
                         </div>
                     }
-                </For>
-            </Suspense> */}
+                </For> */}
+            </Suspense>
         </div>
     )
 }

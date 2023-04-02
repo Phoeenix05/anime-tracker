@@ -7,7 +7,7 @@ use std::{collections::HashMap, sync::Arc};
 use tauri::async_runtime::Mutex;
 
 use crate::generate_impls;
-use providers::{jikan::JikanApiImpl, kitsu::KitsuApiImpl, offline::OfflineImpl};
+use providers::{jikan::*, kitsu::*, offline::*, ApiData};
 
 ///// ––––––––––––––––––––––––––– \\\\\\
 ///// –––––––– Api Trait –––––––– \\\\\\
@@ -18,7 +18,7 @@ pub type Res<T> = Result<T, reqwest::Error>;
 
 #[async_trait]
 pub trait ApiImpl: Send + Sync {
-    async fn search(&self, query: String) -> Res<(String, String)>;
+    async fn search(&self, query: String) -> Res<ApiData>;
 
     async fn search_anime(&self, query: String) -> Res<String>;
 
@@ -55,7 +55,7 @@ impl ApiManager {
         }
     }
 
-    pub async fn search(&self, query: String) -> Res<(String, String)> {
+    pub async fn search(&self, query: String) -> Res<ApiData> {
         self.api.search(query).await
     }
 
@@ -108,7 +108,7 @@ pub async fn get_api_impls() -> HashMap<String, String> {
 }
 
 #[tauri::command]
-pub async fn search_api(query: String) -> Result<(String, String), String> {
+pub async fn search_api(query: String) -> Result<ApiData, String> {
     let api_manager = API_MANAGER.lock().await;
     match api_manager.search(query).await {
         Ok(res) => Ok(res),

@@ -3,6 +3,16 @@ use async_trait::async_trait;
 
 use crate::api::{ApiImpl, Res};
 
+use super::ApiData;
+
+impl From<OfflineResponse> for ApiData {
+    fn from(value: OfflineResponse) -> Self {
+        todo!()
+    }
+}
+
+pub struct OfflineResponse(String, String);
+
 pub struct OfflineImpl {
     path: String,
 }
@@ -17,10 +27,10 @@ impl Default for OfflineImpl {
 
 #[async_trait]
 impl ApiImpl for OfflineImpl {
-    async fn search(&self, query: String) -> Res<(String, String)> {
+    async fn search(&self, query: String) -> Res<ApiData> {
         // let data_pb = tauri::api::path::app_data_dir(tauri::Config::);
         // include_str!("../../../../resources/livechart-raw-data.json");
-
+        // Ok(OfflineResponse((anime, manga)).into())
         todo!()
     }
 

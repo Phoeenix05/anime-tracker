@@ -2,6 +2,18 @@ use async_trait::async_trait;
 
 use crate::api::{ApiImpl, Res};
 
+use super::ApiData;
+
+impl From<JikanResponse> for ApiData {
+    fn from(value: JikanResponse) -> Self {
+        // let json: serde_json::Value = serde_json::from
+        
+        todo!()
+    }
+}
+
+pub struct JikanResponse(String, String);
+
 pub struct JikanApiImpl {
     url: String,
     client: reqwest::Client,
@@ -18,10 +30,10 @@ impl Default for JikanApiImpl {
 
 #[async_trait]
 impl ApiImpl for JikanApiImpl {
-    async fn search(&self, query: String) -> Res<(String, String)> {
+    async fn search(&self, query: String) -> Res<ApiData> {
         let anime = self.search_anime(query.to_owned()).await?;
         let manga = self.search_manga(query.to_owned()).await?;
-        Ok((anime, manga))
+        Ok(JikanResponse(anime, manga).into())
     }
 
     async fn search_anime(&self, query: String) -> Res<String> {

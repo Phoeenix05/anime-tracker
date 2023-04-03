@@ -46,9 +46,9 @@ pub struct Attributes {
     #[serde(rename = "endDate")]
     pub end_date: Option<String>,
     #[serde(rename = "popularityRank")]
-    pub popularity_rank: Option<f64>,
+    pub popularity_rank: Option<i64>,
     #[serde(rename = "ratingRank")]
-    pub rating_rank: Option<f64>,
+    pub rating_rank: Option<i64>,
     #[serde(rename = "ageRating")]
     pub age_rating: Option<String>,
     #[serde(rename = "ageRatingGuide")]

@@ -1,3 +1,4 @@
+mod interface;
 mod providers;
 
 use async_trait::async_trait;

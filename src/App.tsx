@@ -1,8 +1,8 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import { Component, Suspense, createResource, createSignal } from 'solid-js'
-import { ApiData } from './util/data'
+// import { ApiData } from './util/data'
 
-const fetch_data = async (q: string): Promise<ApiData> => {
+const fetch_data = async (q: string): Promise<string> => {
     return await invoke<string>('search_api', { query: q })
         .then(res => JSON.parse(res))
 }
@@ -20,16 +20,21 @@ const App: Component = () => {
             <button onClick={refetch}>refresh</button>
             <button onClick={set_kitsu}>Kitsu</button>
             <button onClick={set_jikan}>Jikan</button>
-            <Suspense fallback={<p>Loading...</p>}>
+            { data.loading ? <p>Loading...</p> : 
+                <div>
+                    <pre>{ JSON.stringify(data(), null, 2) }</pre>
+                </div> 
+            }
+            {/* <Suspense fallback={<p>Loading...</p>}>
                 <pre>{ data()?.anime?.[0].titles.en }</pre>
-                {/* <For each={data()?.[0].data}>
+                <For each={data()?.[0].data}>
                     {(item, index) => 
                         <div>
                             #{index()} {item.attributes.titles.en}
                         </div>
                     }
-                </For> */}
-            </Suspense>
+                </For>
+            </Suspense> */}
         </div>
     )
 }

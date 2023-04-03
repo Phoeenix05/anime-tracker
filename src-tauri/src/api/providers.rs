@@ -4,8 +4,6 @@ pub mod jikan;
 pub mod kitsu;
 pub mod offline;
 
-// use self::{kitsu::KitsuResponse, jikan::JikanResponse, offline::OfflineResponse};
-
 /// Modelled after Kitsu.io's API response
 #[derive(Serialize)]
 pub struct ApiData {
@@ -16,46 +14,22 @@ pub struct ApiData {
 #[derive(Serialize)]
 pub struct Data {
     id: String,
-    // #[serde(rename = "type")]
     data_type: String,
     titles: Titles,
-    // #[serde(rename = "canonicalTitle")]
     canon_title: Option<String>,
-    rating: String,
+    rating: Option<String>,
     popularity: i64,
     rank: i64,
-    age_rating: String,
-    age_rating_guide: String,
-    sub_type: String,
+    age_rating: Option<String>,
+    age_rating_guide: Option<String>,
+    sub_type: Option<String>,
     status: String,
-    create_at: String,
-    updated_at: String,
+    create_at: Option<String>,
+    updated_at: Option<String>,
     start_date: String,
     end_date: String,
     images: Option<Images>,
 }
-
-// #[derive(Serialize)]
-// pub struct MangaData {
-//     id: String,
-//     // #[serde(rename = "type")]
-//     data_type: String,
-//     title: Titles,
-//     // #[serde(rename = "canonicalTitle")]
-//     canon_title: Option<String>,
-//     rating: String,
-//     popularity: i64,
-//     rank: i64,
-//     age_rating: String,
-//     age_rating_guide: String,
-//     sub_type: String,
-//     status: String,
-//     create_at: String,
-//     updated_at: String,
-//     start_date: String,
-//     end_date: String,
-//     images: Images,
-// }
 
 #[derive(Serialize)]
 pub struct Images {

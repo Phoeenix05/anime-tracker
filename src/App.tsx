@@ -4,7 +4,7 @@ import { Component, Suspense, createResource, createSignal } from 'solid-js'
 
 const fetch_data = async (q: string): Promise<string> => {
     return await invoke<string>('search_api', { query: q })
-        .then(res => JSON.parse(res))
+        .then(res => res)
 }
 
 const set_jikan = async () => await invoke('set_api_impl', { implName: 'Jikan (3rd party MyAnimeList API)' })

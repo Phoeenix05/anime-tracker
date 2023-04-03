@@ -1,7 +1,7 @@
 #![allow(dead_code, unused_variables)]
 use async_trait::async_trait;
 
-use crate::api::{interface::kitsu::KitsuSearchData, ApiImpl, Res};
+use crate::api::{interface::kitsu::{KitsuSearchData, CoverImage}, ApiImpl, Res};
 
 use super::{ApiData, Data, Images, Titles};
 
@@ -23,66 +23,80 @@ impl Into<ApiData> for KitsuResponse {
             anime: Some(
                 anime
                     .data
+                    .unwrap()
                     .into_iter()
-                    .map(|a| Data {
-                        id: a.id,
-                        data_type: a.datum_type,
-                        titles: Titles {
-                            en: a.attributes.titles.en,
-                            jp: a.attributes.titles.ja_jp,
-                            roman: a.attributes.titles.en_jp,
-                        },
-                        canon_title: Some(a.attributes.canonical_title),
-                        rating: a.attributes.average_rating.into(),
-                        popularity: a.attributes.popularity_rank,
-                        rank: a.attributes.rating_rank,
-                        age_rating: Some(a.attributes.age_rating),
-                        age_rating_guide: Some(a.attributes.age_rating_guide),
-                        sub_type: Some(a.attributes.subtype),
-                        status: a.attributes.status,
-                        create_at: Some(a.attributes.created_at),
-                        updated_at: Some(a.attributes.updated_at),
-                        start_date: a.attributes.start_date,
-                        end_date: a.attributes.end_date,
-                        images: Some(Images {
-                            tiny: Some(a.attributes.cover_image.tiny),
-                            small: Some(a.attributes.cover_image.small),
-                            medium: Some(a.attributes.cover_image.original),
-                            large: Some(a.attributes.cover_image.large),
-                        }),
+                    .map(|a| {
+                        let attr = a.attributes.unwrap();
+                        let titles = attr.titles.unwrap();
+                        let cover_image = attr.cover_image.unwrap();
+
+                        Data {
+                            id: a.id,
+                            data_type: a.datum_type,
+                            titles: Some(Titles {
+                                en: titles.en,
+                                jp: titles.ja_jp,
+                                roman: titles.en_jp,
+                            }),
+                            canon_title: attr.canonical_title,
+                            rating: attr.average_rating.into(),
+                            popularity: attr.popularity_rank,
+                            rank: attr.rating_rank,
+                            age_rating: attr.age_rating,
+                            age_rating_guide: attr.age_rating_guide,
+                            sub_type: attr.subtype,
+                            status: attr.status,
+                            create_at: attr.created_at,
+                            updated_at: attr.updated_at,
+                            start_date: attr.start_date,
+                            end_date: attr.end_date,
+                            images: Some(Images {
+                                tiny: cover_image.tiny,
+                                small: cover_image.small,
+                                medium: cover_image.original,
+                                large: cover_image.large,
+                            }),
+                        }
                     })
                     .collect(),
             ),
             manga: Some(
                 manga
                     .data
+                    .unwrap()
                     .into_iter()
-                    .map(|a| Data {
-                        id: a.id,
-                        data_type: a.datum_type,
-                        titles: Titles {
-                            en: a.attributes.titles.en,
-                            jp: a.attributes.titles.ja_jp,
-                            roman: a.attributes.titles.en_jp,
-                        },
-                        canon_title: Some(a.attributes.canonical_title),
-                        rating: a.attributes.average_rating.into(),
-                        popularity: a.attributes.popularity_rank,
-                        rank: a.attributes.rating_rank,
-                        age_rating: Some(a.attributes.age_rating),
-                        age_rating_guide: Some(a.attributes.age_rating_guide),
-                        sub_type: Some(a.attributes.subtype),
-                        status: a.attributes.status,
-                        create_at: Some(a.attributes.created_at),
-                        updated_at: Some(a.attributes.updated_at),
-                        start_date: a.attributes.start_date,
-                        end_date: a.attributes.end_date,
-                        images: Some(Images {
-                            tiny: Some(a.attributes.cover_image.tiny),
-                            small: Some(a.attributes.cover_image.small),
-                            medium: Some(a.attributes.cover_image.original),
-                            large: Some(a.attributes.cover_image.large),
-                        }),
+                    .map(|a| {
+                        let attr = a.attributes.unwrap();
+                        let titles = attr.titles.unwrap();
+                        let cover_image = attr.cover_image.unwrap_or(CoverImage::default());
+
+                        Data {
+                            id: a.id,
+                            data_type: a.datum_type,
+                            titles: Some(Titles {
+                                en: titles.en,
+                                jp: titles.ja_jp,
+                                roman: titles.en_jp,
+                            }),
+                            canon_title: attr.canonical_title,
+                            rating: attr.average_rating.into(),
+                            popularity: attr.popularity_rank,
+                            rank: attr.rating_rank,
+                            age_rating: attr.age_rating,
+                            age_rating_guide: attr.age_rating_guide,
+                            sub_type: attr.subtype,
+                            status: attr.status,
+                            create_at: attr.created_at,
+                            updated_at: attr.updated_at,
+                            start_date: attr.start_date,
+                            end_date: attr.end_date,
+                            images: Some(Images {
+                                tiny: cover_image.tiny,
+                                small: cover_image.small,
+                                medium: cover_image.original,
+                                large: cover_image.large,
+                            }),
+                        }
                     })
                     .collect(),
             ),

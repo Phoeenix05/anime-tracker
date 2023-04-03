@@ -26,66 +26,78 @@ impl Into<ApiData> for JikanResponse {
             anime: Some(
                 anime
                     .data
+                    .unwrap()
                     .into_iter()
-                    .map(|a| Data {
-                        id: a.mal_id.to_string(),
-                        data_type: a.datum_type,
-                        titles: Titles {
-                            en: a.title_english,
-                            jp: a.title_japanese,
-                            roman: a.title,
-                        },
-                        canon_title: None,
-                        rating: None,
-                        popularity: a.popularity,
-                        rank: a.rank,
-                        age_rating: Some(a.rating),
-                        age_rating_guide: None,
-                        sub_type: None,
-                        status: a.status,
-                        create_at: None,
-                        updated_at: None,
-                        start_date: a.aired.from,
-                        end_date: a.aired.to,
-                        images: Some(Images {
-                            tiny: None,
-                            small: Some(a.images.get("jpg").unwrap().small_image_url.clone()),
-                            medium: Some(a.images.get("jpg").unwrap().image_url.clone()),
-                            large: Some(a.images.get("jpg").unwrap().large_image_url.clone()),
-                        }),
+                    .map(|a| {
+                        let aired = a.aired.unwrap();
+                        let images = a.images.unwrap();
+
+                        Data {
+                            id: Some(a.mal_id.unwrap().to_string()),
+                            data_type: a.datum_type,
+                            titles: Some(Titles {
+                                en: a.title_english,
+                                jp: a.title_japanese,
+                                roman: a.title,
+                            }),
+                            canon_title: None,
+                            rating: None,
+                            popularity: a.popularity,
+                            rank: a.rank,
+                            age_rating: a.rating,
+                            age_rating_guide: None,
+                            sub_type: None,
+                            status: a.status,
+                            create_at: None,
+                            updated_at: None,
+                            start_date: aired.from,
+                            end_date: aired.to,
+                            images: Some(Images {
+                                tiny: None,
+                                small: images.get("jpg").unwrap().small_image_url.clone(),
+                                medium: images.get("jpg").unwrap().image_url.clone(),
+                                large: images.get("jpg").unwrap().large_image_url.clone(),
+                            }),
+                        }
                     })
                     .collect(),
             ),
             manga: Some(
                 manga
                     .data
+                    .unwrap()
                     .into_iter()
-                    .map(|a| Data {
-                        id: a.mal_id.to_string(),
-                        data_type: a.datum_type,
-                        titles: Titles {
-                            en: a.title_english,
-                            jp: a.title_japanese,
-                            roman: a.title,
-                        },
-                        canon_title: None,
-                        rating: None,
-                        popularity: a.popularity,
-                        rank: a.rank,
-                        age_rating: None,
-                        age_rating_guide: None,
-                        sub_type: None,
-                        status: a.status,
-                        create_at: None,
-                        updated_at: None,
-                        start_date: a.published.from,
-                        end_date: a.published.to,
-                        images: Some(Images {
-                            tiny: None,
-                            small: Some(a.images.get("jpg").unwrap().small_image_url.clone()),
-                            medium: Some(a.images.get("jpg").unwrap().image_url.clone()),
-                            large: Some(a.images.get("jpg").unwrap().large_image_url.clone()),
-                        }),
+                    .map(|a| {
+                        let published = a.published.unwrap();
+                        let images = a.images.unwrap();
+
+                        Data {
+                            id: Some(a.mal_id.unwrap().to_string()),
+                            data_type: a.datum_type,
+                            titles: Some(Titles {
+                                en: a.title_english,
+                                jp: a.title_japanese,
+                                roman: a.title,
+                            }),
+                            canon_title: None,
+                            rating: None,
+                            popularity: Some(a.popularity.unwrap() as f64),
+                            rank: Some(a.rank.unwrap() as f64),
+                            age_rating: None,
+                            age_rating_guide: None,
+                            sub_type: None,
+                            status: a.status,
+                            create_at: None,
+                            updated_at: None,
+                            start_date: published.from,
+                            end_date: published.to,
+                            images: Some(Images {
+                                tiny: None,
+                                small: images.get("jpg").unwrap().small_image_url.clone(),
+                                medium: images.get("jpg").unwrap().image_url.clone(),
+                                large: images.get("jpg").unwrap().large_image_url.clone(),
+                            }),
+                        }
                     })
                     .collect(),
             ),

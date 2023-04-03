@@ -3,146 +3,146 @@ use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct KitsuSearchData {
-    pub data: Vec<Datum>,
-    pub meta: WelcomeMeta,
-    pub links: WelcomeLinks,
+    pub data: Option<Vec<Datum>>,
+    pub meta: Option<WelcomeMeta>,
+    pub links: Option<WelcomeLinks>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Datum {
-    pub id: String,
+    pub id: Option<String>,
     #[serde(rename = "type")]
-    pub datum_type: String,
-    pub links: DatumLinks,
-    pub attributes: Attributes,
-    pub relationships: HashMap<String, Relationship>,
+    pub datum_type: Option<String>,
+    pub links: Option<DatumLinks>,
+    pub attributes: Option<Attributes>,
+    pub relationships: Option<HashMap<String, Relationship>>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Attributes {
     #[serde(rename = "createdAt")]
-    pub created_at: String,
+    pub created_at: Option<String>,
     #[serde(rename = "updatedAt")]
-    pub updated_at: String,
-    pub slug: String,
-    pub synopsis: String,
+    pub updated_at: Option<String>,
+    pub slug: Option<String>,
+    pub synopsis: Option<String>,
     #[serde(rename = "coverImageTopOffset")]
-    pub cover_image_top_offset: i64,
-    pub titles: Titles,
+    pub cover_image_top_offset: Option<i64>,
+    pub titles: Option<Titles>,
     #[serde(rename = "canonicalTitle")]
-    pub canonical_title: String,
+    pub canonical_title: Option<String>,
     #[serde(rename = "abbreviatedTitles")]
-    pub abbreviated_titles: Vec<String>,
+    pub abbreviated_titles: Option<Vec<String>>,
     #[serde(rename = "averageRating")]
-    pub average_rating: String,
+    pub average_rating: Option<String>,
     #[serde(rename = "ratingFrequencies")]
-    pub rating_frequencies: HashMap<String, String>,
+    pub rating_frequencies: Option<HashMap<String, String>>,
     #[serde(rename = "userCount")]
-    pub user_count: i64,
+    pub user_count: Option<i64>,
     #[serde(rename = "favoritesCount")]
-    pub favorites_count: i64,
+    pub favorites_count: Option<i64>,
     #[serde(rename = "startDate")]
-    pub start_date: String,
+    pub start_date: Option<String>,
     #[serde(rename = "endDate")]
-    pub end_date: String,
+    pub end_date: Option<String>,
     #[serde(rename = "popularityRank")]
-    pub popularity_rank: i64,
+    pub popularity_rank: Option<f64>,
     #[serde(rename = "ratingRank")]
-    pub rating_rank: i64,
+    pub rating_rank: Option<f64>,
     #[serde(rename = "ageRating")]
-    pub age_rating: String,
+    pub age_rating: Option<String>,
     #[serde(rename = "ageRatingGuide")]
-    pub age_rating_guide: String,
-    pub subtype: String,
-    pub status: String,
-    pub tba: String,
+    pub age_rating_guide: Option<String>,
+    pub subtype: Option<String>,
+    pub status: Option<String>,
+    pub tba: Option<String>,
     #[serde(rename = "posterImage")]
-    pub poster_image: PosterImage,
+    pub poster_image: Option<PosterImage>,
     #[serde(rename = "coverImage")]
-    pub cover_image: CoverImage,
+    pub cover_image: Option<CoverImage>,
     #[serde(rename = "episodeCount")]
-    pub episode_count: i64,
+    pub episode_count: Option<i64>,
     #[serde(rename = "episodeLength")]
-    pub episode_length: i64,
+    pub episode_length: Option<i64>,
     #[serde(rename = "youtubeVideoId")]
-    pub youtube_video_id: String,
+    pub youtube_video_id: Option<String>,
     #[serde(rename = "showType")]
-    pub show_type: String,
-    pub nsfw: bool,
+    pub show_type: Option<String>,
+    pub nsfw: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct CoverImage {
-    pub tiny: String,
-    pub small: String,
-    pub large: String,
-    pub original: String,
-    pub meta: CoverImageMeta,
+    pub tiny: Option<String>,
+    pub small: Option<String>,
+    pub large: Option<String>,
+    pub original: Option<String>,
+    pub meta: Option<CoverImageMeta>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct CoverImageMeta {
-    pub dimensions: Dimensions,
+    pub dimensions: Option<Dimensions>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Dimensions {
-    pub tiny: Large,
-    pub small: Large,
-    pub large: Large,
-    pub medium: Option<Large>,
+    pub tiny: Option<Large>,
+    pub small: Option<Large>,
+    pub large: Option<Large>,
+    pub medium: Option<Option<Large>>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Large {
-    pub width: Option<serde_json::Value>,
-    pub height: Option<serde_json::Value>,
+    pub width: Option<Option<serde_json::Value>>,
+    pub height: Option<Option<serde_json::Value>>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct PosterImage {
-    pub tiny: String,
-    pub small: String,
-    pub medium: String,
-    pub large: String,
-    pub original: String,
-    pub meta: CoverImageMeta,
+    pub tiny: Option<String>,
+    pub small: Option<String>,
+    pub medium: Option<String>,
+    pub large: Option<String>,
+    pub original: Option<String>,
+    pub meta: Option<CoverImageMeta>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Titles {
-    pub en: String,
-    pub en_jp: String,
-    pub ja_jp: String,
+    pub en: Option<String>,
+    pub en_jp: Option<String>,
+    pub ja_jp: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct DatumLinks {
     #[serde(rename = "self")]
-    pub links_self: String,
+    pub links_self: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Relationship {
-    pub links: RelationshipLinks,
+    pub links: Option<RelationshipLinks>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct RelationshipLinks {
     #[serde(rename = "self")]
-    pub links_self: String,
-    pub related: String,
+    pub links_self: Option<String>,
+    pub related: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct WelcomeLinks {
-    pub first: String,
-    pub prev: String,
-    pub next: String,
-    pub last: String,
+    pub first: Option<String>,
+    pub prev: Option<String>,
+    pub next: Option<String>,
+    pub last: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct WelcomeMeta {
-    pub count: i64,
+    pub count: Option<i64>,
 }

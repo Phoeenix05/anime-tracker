@@ -13,21 +13,21 @@ pub struct ApiData {
 
 #[derive(Serialize)]
 pub struct Data {
-    id: String,
-    data_type: String,
-    titles: Titles,
+    id: Option<String>,
+    data_type: Option<String>,
+    titles: Option<Titles>,
     canon_title: Option<String>,
     rating: Option<String>,
-    popularity: i64,
-    rank: i64,
+    popularity: Option<f64>,
+    rank: Option<f64>,
     age_rating: Option<String>,
     age_rating_guide: Option<String>,
     sub_type: Option<String>,
-    status: String,
+    status: Option<String>,
     create_at: Option<String>,
     updated_at: Option<String>,
-    start_date: String,
-    end_date: String,
+    start_date: Option<String>,
+    end_date: Option<String>,
     images: Option<Images>,
 }
 
@@ -41,7 +41,7 @@ pub struct Images {
 
 #[derive(Serialize)]
 pub struct Titles {
-    en: String,
-    jp: String,
-    roman: String,
+    en: Option<String>,
+    jp: Option<String>,
+    roman: Option<String>,
 }

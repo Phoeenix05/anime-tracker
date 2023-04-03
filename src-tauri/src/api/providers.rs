@@ -5,13 +5,13 @@ pub mod kitsu;
 pub mod offline;
 
 /// Modelled after Kitsu.io's API response
-#[derive(Serialize)]
+#[derive(Serialize, Default)]
 pub struct ApiData {
     anime: Option<Vec<Data>>,
     manga: Option<Vec<Data>>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Default)]
 pub struct Data {
     id: Option<String>,
     data_type: Option<String>,
@@ -31,7 +31,7 @@ pub struct Data {
     images: Option<Images>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Default)]
 pub struct Images {
     tiny: Option<String>,
     small: Option<String>,
@@ -39,7 +39,7 @@ pub struct Images {
     large: Option<String>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Default)]
 pub struct Titles {
     en: Option<String>,
     jp: Option<String>,

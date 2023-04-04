@@ -3,7 +3,7 @@ export interface ApiData {
     manga?: Data[]
 }
 
-interface Data {
+export interface Data {
     id: string
     data_type: string
     titles: Titles

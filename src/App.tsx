@@ -1,9 +1,10 @@
 import { invoke } from '@tauri-apps/api/tauri'
-import { Component, Suspense, createResource, createSignal } from 'solid-js'
-// import { ApiData } from './util/data'
+import { Component, For, createResource, createSignal } from 'solid-js'
+import { ApiData } from './util/data'
+// import { Poster } from './components/poster'
 
-const fetch_data = async (q: string): Promise<string> => {
-    return await invoke<string>('search_api', { query: q })
+const fetch_data = async (q: string): Promise<ApiData> => {
+    return await invoke<ApiData>('search_api', { query: q })
         .then(res => res)
 }
 
@@ -21,20 +22,32 @@ const App: Component = () => {
             <button onClick={set_kitsu}>Kitsu</button>
             <button onClick={set_jikan}>Jikan</button>
             { data.loading ? <p>Loading...</p> : 
-                <div>
-                    <pre>{ JSON.stringify(data(), null, 2) }</pre>
-                </div> 
+                // <div>
+                //     <pre>{ JSON.stringify(data(), null, 2) }</pre>
+                // </div> 
+                <div id="list">
+                    <For each={data()?.anime}>
+                        {(item, index) => 
+                            // <Poster data={item} />
+                            <div id="list__item">
+                                <h3>{ item.canon_title || item.titles.en || item.titles.jp }</h3>
+                                <p>Rank { item.rank } / Rating { item.rating }</p>
+                                <p>Aired { item.start_date } to { item.end_date || 'TBA' }</p>
+                            </div>
+                        }
+                    </For>
+                    <For each={data()?.manga}>
+                        {(item, index) => 
+                            // <Poster data={item} />
+                            <div id="list__item">
+                                <h3>{ item.canon_title || item.titles.en || item.titles.jp }</h3>
+                                <p>Rank { item.rank } / Rating { item.rating }</p>
+                                <p>Aired { item.start_date } to { item.end_date || 'TBA' }</p>
+                            </div>
+                        }
+                    </For>
+                </div>
             }
-            {/* <Suspense fallback={<p>Loading...</p>}>
-                <pre>{ data()?.anime?.[0].titles.en }</pre>
-                <For each={data()?.[0].data}>
-                    {(item, index) => 
-                        <div>
-                            #{index()} {item.attributes.titles.en}
-                        </div>
-                    }
-                </For>
-            </Suspense> */}
         </div>
     )
 }

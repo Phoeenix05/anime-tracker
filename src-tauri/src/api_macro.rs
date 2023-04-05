@@ -11,3 +11,10 @@ macro_rules! generate_impls {
         api_impls
     }};
 }
+
+#[macro_export]
+macro_rules! unwrap {
+    ($opt:expr, $default:expr) => {
+        Some($opt.unwrap_or($default))
+    };
+}

@@ -1,7 +1,7 @@
 #![allow(dead_code, unused_variables)]
 use async_trait::async_trait;
 
-use crate::api::{interface::kitsu::{KitsuSearchData, CoverImage}, ApiImpl, Res};
+use crate::{api::{interface::kitsu::{KitsuSearchData, CoverImage}, ApiImpl, Res}, unwrap};
 
 use super::{ApiData, Data, Images, Titles};
 
@@ -28,7 +28,7 @@ impl Into<ApiData> for KitsuResponse {
                     .map(|a| {
                         let attr = a.attributes.unwrap();
                         let titles = attr.titles.unwrap();
-                        let cover_image = attr.cover_image.unwrap();
+                        let cover_image = unwrap!(attr.cover_image, CoverImage::default()).unwrap();
 
                         Data {
                             id: a.id,

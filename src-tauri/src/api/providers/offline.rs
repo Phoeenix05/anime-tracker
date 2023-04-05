@@ -2,8 +2,7 @@
 use async_trait::async_trait;
 
 use crate::api::{ApiImpl, Res};
-
-use super::ApiData;
+use crate::api::ApiData;
 
 pub struct OfflineResponse(String, String);
 

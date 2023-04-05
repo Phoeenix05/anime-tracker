@@ -1,12 +1,9 @@
 #![allow(dead_code, unused_variables)]
 use async_trait::async_trait;
 
-use crate::api::{
-    interface::jikan::{JikanAnimeSearchData, JikanMangaSearchData},
-    ApiImpl, Res,
-};
-
-use super::{ApiData, Data, Images, Titles};
+use crate::api::data::jikan::{JikanAnimeSearchData, JikanMangaSearchData};
+use crate::api::data::{ApiData, Data, Images, Titles};
+use crate::api::{ApiImpl, Res};
 
 pub struct JikanResponse(String, String);
 
@@ -135,6 +132,6 @@ impl ApiImpl for JikanApiImpl {
     }
 
     fn desc(&self) -> &str {
-        "Uses Jikan's API to search data"
+        "Uses Jikan.moe's 3rd party MyAnimeList API to search data"
     }
 }

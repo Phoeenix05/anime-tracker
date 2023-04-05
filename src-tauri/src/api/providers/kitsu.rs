@@ -1,9 +1,10 @@
 #![allow(dead_code, unused_variables)]
 use async_trait::async_trait;
 
-use crate::{api::{interface::kitsu::{KitsuSearchData, CoverImage}, ApiImpl, Res}, unwrap};
-
-use super::{ApiData, Data, Images, Titles};
+use crate::api::data::kitsu::{CoverImage, KitsuSearchData};
+use crate::api::data::{ApiData, Data, Images, Titles};
+use crate::api::{ApiImpl, Res};
+use crate::unwrap;
 
 pub struct KitsuResponse(String, String);
 

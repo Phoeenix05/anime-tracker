@@ -3,3 +3,4 @@
 /target
 .eslintcache
 .DS_Store
+/**/*log*.*

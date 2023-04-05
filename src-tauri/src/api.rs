@@ -1,4 +1,4 @@
-mod interface;
+mod data;
 mod providers;
 
 use async_trait::async_trait;
@@ -7,8 +7,9 @@ use lazy_static::lazy_static;
 use std::{collections::HashMap, sync::Arc};
 use tauri::async_runtime::Mutex;
 
+use crate::api::data::ApiData;
+use crate::api::providers::{jikan::*, kitsu::*, offline::*};
 use crate::generate_impls;
-use providers::{jikan::*, kitsu::*, offline::*, ApiData};
 
 ///// ––––––––––––––––––––––––––– \\\\\\
 ///// –––––––– Api Trait –––––––– \\\\\\

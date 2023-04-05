@@ -1,7 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import { Component, For, createResource, createSignal } from 'solid-js'
 import { ApiData } from './util/data'
-// import { Poster } from './components/poster'
 
 const fetch_data = async (q: string): Promise<ApiData> => {
     return await invoke<ApiData>('search_api', { query: q })
@@ -26,6 +25,7 @@ const App: Component = () => {
                 //     <pre>{ JSON.stringify(data(), null, 2) }</pre>
                 // </div> 
                 <div id="list">
+                    <h1>Anime</h1>
                     <For each={data()?.anime}>
                         {(item, index) => 
                             // <Poster data={item} />
@@ -36,6 +36,8 @@ const App: Component = () => {
                             </div>
                         }
                     </For>
+                    
+                    <h1>Manga</h1>
                     <For each={data()?.manga}>
                         {(item, index) => 
                             // <Poster data={item} />

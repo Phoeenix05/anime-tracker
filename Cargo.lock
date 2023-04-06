@@ -43,7 +43,9 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "cocoa",
  "lazy_static",
+ "objc",
  "reqwest",
  "serde",
  "serde_json",

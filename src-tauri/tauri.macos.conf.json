@@ -1,0 +1,12 @@
+{
+    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+    "tauri": {
+        "macOSPrivateApi": true,
+        "windows": [
+            {
+                "titleBarStyle": "Overlay",
+                "hiddenTitle": true
+            }
+        ]
+    }
+}

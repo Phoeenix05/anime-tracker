@@ -4,8 +4,14 @@
     windows_subsystem = "windows"
 )]
 
+#[cfg(target_os = "macos")]
+#[macro_use]
+extern crate objc;
+
 mod api;
 mod api_macro;
+mod window_ext;
+
 use api::*;
 
 fn main() {

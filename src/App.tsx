@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import { Component, For, createResource, createSignal } from 'solid-js'
 import { ApiData } from './util/data'
+import Navbar from './components/Navbar'
 
 const fetch_data = async (q: string): Promise<ApiData> => {
     return await invoke<ApiData>('search_api', { query: q })
@@ -16,6 +17,7 @@ const App: Component = () => {
 
     return (
         <div>
+            <Navbar />
             <input type="text" onChange={(e) => setQuery(e.currentTarget.value)} />
             <button onClick={refetch}>refresh</button>
             <button onClick={set_kitsu}>Kitsu</button>

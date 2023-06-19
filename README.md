@@ -1,3 +1,6 @@
+# Archived in favor of [MangaDex Reader](https://github.com/phoeenix05/mangadex-reader)
+Archived in favor of my other project as this projects main goal was to help me keep track of Mangas, Manhwas and Manhuas
+I was reading and MangaDex Reader will be able to do that in the future.
 
 # Anime Tracker
 
